@@ -13,8 +13,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.view.View;
 import android.view.Menu;
@@ -40,6 +42,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private int columnIndex;
     private String attachmentFile;
     private TextView tv_attach;
+    private SmsManager smsManager;
+    private boolean isEmail;
+    private ArrayAdapter<CharSequence> emailAdapter;
+    private ArrayAdapter<CharSequence> smsAdapter;
 
     private static final String[]paths = {"item 1", "item 2", "item 3"};
     private static final int PICK_FROM_GALLERY = 101;
@@ -53,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setSupportActionBar(toolbar);
 
         isOther = false;
+        isEmail = true;
         subject = (EditText) findViewById(R.id.subject);
         body = (EditText) findViewById(R.id.body);
         otherRecipient = (EditText) findViewById(R.id.recipient);
@@ -60,27 +67,77 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //tv_attach = (TextView) findViewById(R.id.tv_attach_id);
         otherRecipient.setVisibility(View.GONE);
 
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage("phoneNo", null, "sms message", null, null);
+        smsManager = SmsManager.getDefault();
+
 
 
         spinner = (Spinner)findViewById(R.id.spinner);
-       /* ArrayAdapter<String>adapter = new ArrayAdapter<String>(MainActivity.this,
-                android.R.layout.simple_spinner_item,paths);
+        emailAdapter = ArrayAdapter.createFromResource(
+                this, R.array.recipient_arrays, android.R.layout.simple_spinner_item);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);*/
+        smsAdapter = ArrayAdapter.createFromResource(
+                this, R.array.sms_arrays, android.R.layout.simple_spinner_item);
+
+        emailAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        smsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(emailAdapter);
         //btnAttachment.setOnClickListener(this);
         spinner.setOnItemSelectedListener(this);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                sendEmail();
+                if(isEmail)
+                    sendEmail();
+                else
+                    sendSMS();
                 // after sending the email, clear the fields
                 subject.setText("");
                 body.setText("");
             }
         });
+    }
+
+    protected void sendSMS()
+    {
+        String recipient, message;
+        if(isOther)
+            recipient = otherRecipient.getText().toString();
+        else
+            recipient = String.valueOf(spinner.getSelectedItem()).substring(0,13);
+        message = body.getText().toString();
+        try {
+            smsManager.sendTextMessage(recipient, null, message, null, null);
+            Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), recipient, Toast.LENGTH_LONG).show();
+        }
+
+        catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "SMS failed, please try again.", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio_email:
+                if (checked) {
+                    isEmail = true;
+                    subject.setVisibility(View.VISIBLE);
+                    spinner.setAdapter(emailAdapter);
+                    break;
+                }
+            case R.id.radio_sms:
+                if (checked) {
+                    isEmail = false;
+                    subject.setVisibility(View.GONE);
+                    spinner.setAdapter(smsAdapter);
+                    break;
+                }
+        }
     }
 
     protected void sendEmail() {
@@ -156,39 +213,44 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return true;
         }
 
-       /* if (id == R.id.action_donate) {
+       if (id == R.id.action_donate) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle("Donate");
             alertDialogBuilder.setMessage("ireklamo is a free app with no ads and forever will be. If you'd like to support the developer, you can donate any amount.\n" +
-                    "BPI Savings : 9829 2649 91 (Kevin Khalil Reyes)");
+                    "BPI Savings : 9829 2649 91 \n(Kevin Khalil Reyes)");
             alertDialogBuilder.show();
             return true;
-        }*/
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 
-        if(position == 6) {
-            isOther = true;
-            otherRecipient.setVisibility(View.VISIBLE);
-        }
-        else {
-            isOther = false;
-            otherRecipient.setVisibility(View.GONE);
-        }
-        switch (position) {
-            case 0:
-                // Whatever you want to happen when the first item gets selected
-                break;
-            case 1:
-                // Whatever you want to happen when the second item gets selected
-                break;
-            case 2:
-                // Whatever you want to happen when the thrid item gets selected
-                break;
 
+        if(isEmail)
+        {
+            if(position == 10) {
+                isOther = true;
+                otherRecipient.setVisibility(View.VISIBLE);
+            }
+            else {
+                isOther = false;
+                otherRecipient.setVisibility(View.GONE);
+            }
+        }
+        else
+        {
+
+            //Toast.makeText(getApplicationContext(),String.valueOf(position), Toast.LENGTH_LONG).show();
+            if(position == 16) {
+                isOther = true;
+                otherRecipient.setVisibility(View.VISIBLE);
+            }
+            else {
+                isOther = false;
+                otherRecipient.setVisibility(View.GONE);
+            }
         }
     }
 

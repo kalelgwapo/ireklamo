@@ -14,6 +14,30 @@
         <item>corpcustomerservice@pldt.com</item>
         <item>talk@globetel.com.ph</item>
         <item>publicaffairs@smart.com.ph</item>
+        <item>ntc@ntc.gov.ph</item>
+        <item>admin@mtrcb.gov.ph</item>
+        <item>ltombox@lto.gov.ph</item>
+        <item>email@mmda.gov.ph</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="sms_arrays">
+        <item>+639428228489/(CAVITEX)</item>
+        <item>+639177243682/(COASTGUARD)</item>
+        <item>+639189674697/(COASTGUARD)</item>
+        <item>+639176279627/(DILG)</item>
+        <item>+639189122813/(DSWD)</item>
+        <item>+639178475757/(PNP)</item>
+        <item>+639177862664/(MARINA)</item>
+        <item>+639178396242/(MIAA/NAIA)</item>
+        <item>+639175501342/(LTFRB)</item>
+        <item>+639985501342/(LTFRB)</item>
+        <item>+639214487777/(LTO)</item>
+        <item>+639209672839/(SCTEX)</item>
+        <item>+639175398762/(SKYWAY)</item>
+        <item>+639998860893/(SKYWAY)</item>
+        <item>+639328546980/(SKYWAY)</item>
+        <item>+639176877539/(SLEX)</item>
         <item>Other</item>
     </string-array>
 </resources>
