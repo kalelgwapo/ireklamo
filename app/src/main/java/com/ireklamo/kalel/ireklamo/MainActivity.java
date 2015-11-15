@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -58,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //btnAttachment = (Button) findViewById(R.id.buttonAttachment);
         //tv_attach = (TextView) findViewById(R.id.tv_attach_id);
         otherRecipient.setVisibility(View.GONE);
+
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage("phoneNo", null, "sms message", null, null);
 
 
         spinner = (Spinner)findViewById(R.id.spinner);
