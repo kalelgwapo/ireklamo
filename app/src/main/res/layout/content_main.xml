@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Message body" />
+            android:hint="For a much better complaint, include the following: Name, Phone/Mobile #, Complaint info (provider, plate number, franchise etc), type of complaint and your message" />
 
        <!-- <Button
             android:id="@+id/buttonAttachment"
